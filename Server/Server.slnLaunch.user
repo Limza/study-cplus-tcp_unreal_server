@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "server & client",
+    "Projects": [
+      {
+        "Path": "GameServer\\GameServer.vcxproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "DummyClient\\DummyClient.vcxproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
