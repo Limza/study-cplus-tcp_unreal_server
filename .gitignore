@@ -88,11 +88,11 @@ DerivedDataCache/*
 *.uprojectdirs
 
 # Engine local folders (if present)
-Engine/DerivedDataCache/*
-Engine/Intermediate/*
-Engine/Saved/*
-Engine/Binaries/*
-Engine/Build/*
+UnrealClient/DerivedDataCache/*
+UnrealClient/Intermediate/*
+UnrealClient/Saved/*
+UnrealClient/Binaries/*
+UnrealClient/Build/*
 
 # 언리얼 프로토 버프에 사용되는 lib 파일들은 포함
-!UnrealClientSource/ProtobufCore/Lib/Win64/libprotobufd.lib
+!UnrealClient/Source/ProtobufCore/Lib/Win64/libprotobuf.lib
