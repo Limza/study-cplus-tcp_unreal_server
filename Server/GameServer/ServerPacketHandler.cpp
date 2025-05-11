@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "ClientPacketHandler.h"
+#include "ServerPacketHandler.h"
 
 #include "GameSession.h"
 #include "Player.h"
@@ -53,7 +53,7 @@ bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 		gameSession->_players.emplace_back(playerRef);
 	}
 
-	const auto sendBuffer = ClientPacketHandler::MakeSendBuffer(loginPkt);
+	const auto sendBuffer = ServerPacketHandler::MakeSendBuffer(loginPkt);
 	session->Send(sendBuffer);
 
 	return true;
@@ -73,7 +73,7 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 
 	Protocol::S_ENTER_GAME enterGamePkt;
 	enterGamePkt.set_success(true);
-	const auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterGamePkt);
+	const auto sendBuffer = ServerPacketHandler::MakeSendBuffer(enterGamePkt);
 	gameSession->_currentPlayer->ownerSession->Send(sendBuffer);
 
 	return true;
@@ -85,10 +85,15 @@ bool Handle_C_CHAT(PacketSessionRef& session, Protocol::C_CHAT& pkt)
 
 	Protocol::S_CHAT chatPkt;
 	chatPkt.set_msg(pkt.msg());
-	const auto sendBuffer = ClientPacketHandler::MakeSendBuffer(chatPkt);
+	const auto sendBuffer = ServerPacketHandler::MakeSendBuffer(chatPkt);
 
 	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
 
+	return true;
+}
+
+bool Handle_C_HELLOWORLD(PacketSessionRef& session, Protocol::C_HELLOWORLD& pkt)
+{
 	return true;
 }
 

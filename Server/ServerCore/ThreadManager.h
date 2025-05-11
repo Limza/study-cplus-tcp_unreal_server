@@ -12,7 +12,7 @@ public:
 	ThreadManager();
 	~ThreadManager();
 
-	void Launch(const std::function<void(void)>& callback);
+	void Launch(std::function<void(void)>&& callback);
 	void Join();
 
 	static void InitTls();

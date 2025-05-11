@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "GameSession.h"
 #include "GameSessionManager.h"
-#include "ClientPacketHandler.h"
+#include "ServerPacketHandler.h"
 #include "Room.h"
 
 using namespace std;
@@ -32,7 +32,7 @@ void GameSession::OnDisconnected()
 void GameSession::OnRecvPacket(BYTE* buffer, const int32 len)
 {
 	auto session = GetPacketSessionRef();
-	ClientPacketHandler::HandlePacket(session, buffer, len);
+	ServerPacketHandler::HandlePacket(session, buffer, len);
 }
 
 void GameSession::OnSend(const int32 len)

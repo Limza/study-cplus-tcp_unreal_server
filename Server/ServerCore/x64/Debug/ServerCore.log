@@ -1,6 +1,4 @@
 ﻿  CoreGlobal.cpp
-  JobQueue.cpp
-  JobTimer.cpp
   ThreadManager.cpp
   코드를 생성하고 있습니다...
-  ServerCore.vcxproj -> C:\Users\rkddl\Desktop\MyWork\study-cplus-tcp_server\Server\Lib\Libs\ServerCore\Debug\ServerCore.lib
+  ServerCore.vcxproj -> C:\Users\rkddl\Desktop\MyWork\study-cplus-tcp_unreal_server\Server\Lib\Libs\ServerCore\Debug\ServerCore.lib

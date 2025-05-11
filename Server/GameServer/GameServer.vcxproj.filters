@@ -30,7 +30,7 @@
     <ClCompile Include="GameSessionManager.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="ClientPacketHandler.cpp">
+    <ClCompile Include="ServerPacketHandler.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="Protocol.pb.cc">
@@ -59,7 +59,7 @@
     <ClInclude Include="GameSessionManager.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="ClientPacketHandler.h">
+    <ClInclude Include="ServerPacketHandler.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Protocol.pb.h">
@@ -79,16 +79,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Protobuf\bin\Enum.proto">
+    <None Include="..\Common\Protobuf\assets\Enum.proto">
       <Filter>Protocol\proto</Filter>
     </None>
-    <None Include="..\Common\Protobuf\bin\Protocol.proto">
+    <None Include="..\Common\Protobuf\assets\GenPackets.bat">
       <Filter>Protocol\proto</Filter>
     </None>
-    <None Include="..\Common\Protobuf\bin\Struct.proto">
+    <None Include="..\Common\Protobuf\assets\Protocol.proto">
       <Filter>Protocol\proto</Filter>
     </None>
-    <None Include="..\Common\Protobuf\bin\GenPackets.bat">
+    <None Include="..\Common\Protobuf\assets\Struct.proto">
       <Filter>Protocol\proto</Filter>
     </None>
   </ItemGroup>

@@ -18,7 +18,7 @@
     <ClCompile Include="DummyClient.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="ServerPacketHandler.cpp">
+    <ClCompile Include="ClientPacketHandler.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -38,7 +38,7 @@
     <ClInclude Include="pch.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="ServerPacketHandler.h">
+    <ClInclude Include="ClientPacketHandler.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Protocol.pb.h">
@@ -52,16 +52,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Common\Protobuf\bin\Enum.proto">
+    <None Include="..\Common\Protobuf\assets\GenPackets.bat">
       <Filter>Protocol\proto</Filter>
     </None>
-    <None Include="..\Common\Protobuf\bin\Protocol.proto">
+    <None Include="..\Common\Protobuf\assets\Protocol.proto">
       <Filter>Protocol\proto</Filter>
     </None>
-    <None Include="..\Common\Protobuf\bin\Struct.proto">
+    <None Include="..\Common\Protobuf\assets\Struct.proto">
       <Filter>Protocol\proto</Filter>
     </None>
-    <None Include="..\Common\Protobuf\bin\GenPackets.bat">
+    <None Include="..\Common\Protobuf\assets\Enum.proto">
       <Filter>Protocol\proto</Filter>
     </None>
   </ItemGroup>

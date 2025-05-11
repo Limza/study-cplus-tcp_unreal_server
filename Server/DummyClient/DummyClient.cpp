@@ -2,7 +2,7 @@
 #include "Session.h"
 #include "Service.h"
 #include "ThreadManager.h"
-#include "ServerPacketHandler.h"
+#include "ClientPacketHandler.h"
 
 using namespace std;
 
@@ -19,8 +19,9 @@ protected:
 	{
 		// cout << "Connected To Server" << '\n';
 
-		const Protocol::C_LOGIN pkt;
-		auto sendBufferRef = ServerPacketHandler::MakeSendBuffer(pkt);
+		Protocol::C_HELLOWORLD pkt;
+		pkt.set_msg("hello world");
+		auto sendBufferRef = ClientPacketHandler::MakeSendBuffer(pkt);
 		Send(sendBufferRef);
 	}
 
@@ -28,7 +29,7 @@ protected:
 	{
 		auto session = GetPacketSessionRef();
 
-		ServerPacketHandler::HandlePacket(session, buffer, len);
+		ClientPacketHandler::HandlePacket(session, buffer, len);
 	}
 
 	void OnSend(const int32 len) override
@@ -44,7 +45,7 @@ protected:
 
 int main()
 {
-	ServerPacketHandler::Init();
+	ClientPacketHandler::Init();
 
 	this_thread::sleep_for(1s);
 
@@ -69,7 +70,7 @@ int main()
 
 	Protocol::C_CHAT chatPkt;
 	chatPkt.set_msg(reinterpret_cast<const char*>(u8"Hello world"));
-	auto sendBuffer = ServerPacketHandler::MakeSendBuffer(chatPkt);
+	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(chatPkt);
 
 	while (true)
 	{

@@ -94,8 +94,20 @@ struct S_CHATDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S_CHATDefaultTypeInternal _S_CHAT_default_instance_;
+PROTOBUF_CONSTEXPR C_HELLOWORLD::C_HELLOWORLD(
+    ::_pbi::ConstantInitialized)
+  : msg_(&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}){}
+struct C_HELLOWORLDDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR C_HELLOWORLDDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~C_HELLOWORLDDefaultTypeInternal() {}
+  union {
+    C_HELLOWORLD _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C_HELLOWORLDDefaultTypeInternal _C_HELLOWORLD_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_Protocol_2eproto[6];
+static ::_pb::Metadata file_level_metadata_Protocol_2eproto[7];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_Protocol_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_Protocol_2eproto = nullptr;
 
@@ -143,6 +155,13 @@ const uint32_t TableStruct_Protocol_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::S_CHAT, playerid_),
   PROTOBUF_FIELD_OFFSET(::Protocol::S_CHAT, msg_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_HELLOWORLD, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C_HELLOWORLD, msg_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::C_LOGIN)},
@@ -151,6 +170,7 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 21, -1, -1, sizeof(::Protocol::S_ENTER_GAME)},
   { 28, -1, -1, sizeof(::Protocol::C_CHAT)},
   { 35, -1, -1, sizeof(::Protocol::S_CHAT)},
+  { 43, -1, -1, sizeof(::Protocol::C_HELLOWORLD)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -160,6 +180,7 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_S_ENTER_GAME_default_instance_._instance,
   &::Protocol::_C_CHAT_default_instance_._instance,
   &::Protocol::_S_CHAT_default_instance_._instance,
+  &::Protocol::_C_HELLOWORLD_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -169,7 +190,8 @@ const char descriptor_table_protodef_Protocol_2eproto[] PROTOBUF_SECTION_VARIABL
   "Player\"#\n\014C_ENTER_GAME\022\023\n\013playerIndex\030\001 "
   "\001(\004\"\037\n\014S_ENTER_GAME\022\017\n\007success\030\001 \001(\010\"\025\n\006"
   "C_CHAT\022\013\n\003msg\030\001 \001(\t\"\'\n\006S_CHAT\022\020\n\010playerI"
-  "d\030\001 \001(\004\022\013\n\003msg\030\002 \001(\tb\006proto3"
+  "d\030\001 \001(\004\022\013\n\003msg\030\002 \001(\t\"\033\n\014C_HELLOWORLD\022\013\n\003"
+  "msg\030\001 \001(\tb\006proto3"
   ;
 static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_deps[2] = {
   &::descriptor_table_Enum_2eproto,
@@ -177,9 +199,9 @@ static const ::_pbi::DescriptorTable* const descriptor_table_Protocol_2eproto_de
 };
 static ::_pbi::once_flag descriptor_table_Protocol_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Protocol_2eproto = {
-    false, false, 268, descriptor_table_protodef_Protocol_2eproto,
+    false, false, 297, descriptor_table_protodef_Protocol_2eproto,
     "Protocol.proto",
-    &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 6,
+    &descriptor_table_Protocol_2eproto_once, descriptor_table_Protocol_2eproto_deps, 2, 7,
     schemas, file_default_instances, TableStruct_Protocol_2eproto::offsets,
     file_level_metadata_Protocol_2eproto, file_level_enum_descriptors_Protocol_2eproto,
     file_level_service_descriptors_Protocol_2eproto,
@@ -1196,6 +1218,201 @@ void S_CHAT::InternalSwap(S_CHAT* other) {
       file_level_metadata_Protocol_2eproto[5]);
 }
 
+// ===================================================================
+
+class C_HELLOWORLD::_Internal {
+ public:
+};
+
+C_HELLOWORLD::C_HELLOWORLD(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  // @@protoc_insertion_point(arena_constructor:Protocol.C_HELLOWORLD)
+}
+C_HELLOWORLD::C_HELLOWORLD(const C_HELLOWORLD& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  msg_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    msg_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_msg().empty()) {
+    msg_.Set(from._internal_msg(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C_HELLOWORLD)
+}
+
+inline void C_HELLOWORLD::SharedCtor() {
+msg_.InitDefault();
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  msg_.Set("", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+C_HELLOWORLD::~C_HELLOWORLD() {
+  // @@protoc_insertion_point(destructor:Protocol.C_HELLOWORLD)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void C_HELLOWORLD::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  msg_.Destroy();
+}
+
+void C_HELLOWORLD::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void C_HELLOWORLD::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C_HELLOWORLD)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  msg_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C_HELLOWORLD::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string msg = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_msg();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "Protocol.C_HELLOWORLD.msg"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C_HELLOWORLD::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C_HELLOWORLD)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string msg = 1;
+  if (!this->_internal_msg().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_msg().data(), static_cast<int>(this->_internal_msg().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Protocol.C_HELLOWORLD.msg");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_msg(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C_HELLOWORLD)
+  return target;
+}
+
+size_t C_HELLOWORLD::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C_HELLOWORLD)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string msg = 1;
+  if (!this->_internal_msg().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_msg());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C_HELLOWORLD::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    C_HELLOWORLD::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C_HELLOWORLD::GetClassData() const { return &_class_data_; }
+
+void C_HELLOWORLD::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<C_HELLOWORLD *>(to)->MergeFrom(
+      static_cast<const C_HELLOWORLD &>(from));
+}
+
+
+void C_HELLOWORLD::MergeFrom(const C_HELLOWORLD& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C_HELLOWORLD)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_msg().empty()) {
+    _internal_set_msg(from._internal_msg());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void C_HELLOWORLD::CopyFrom(const C_HELLOWORLD& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C_HELLOWORLD)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C_HELLOWORLD::IsInitialized() const {
+  return true;
+}
+
+void C_HELLOWORLD::InternalSwap(C_HELLOWORLD* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &msg_, lhs_arena,
+      &other->msg_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C_HELLOWORLD::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_Protocol_2eproto_getter, &descriptor_table_Protocol_2eproto_once,
+      file_level_metadata_Protocol_2eproto[6]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
@@ -1222,6 +1439,10 @@ Arena::CreateMaybeMessage< ::Protocol::C_CHAT >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::S_CHAT*
 Arena::CreateMaybeMessage< ::Protocol::S_CHAT >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S_CHAT >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C_HELLOWORLD*
+Arena::CreateMaybeMessage< ::Protocol::C_HELLOWORLD >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C_HELLOWORLD >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

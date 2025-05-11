@@ -14,6 +14,7 @@ enum : uint16
 	PKT_S_ENTER_GAME = 1003,
 	PKT_C_CHAT = 1004,
 	PKT_S_CHAT = 1005,
+	PKT_C_HELLOWORLD = 1006,
 };
 
 
@@ -23,7 +24,7 @@ bool Handle_S_ENTER_GAME(PacketSessionRef& session, Protocol::S_ENTER_GAME& pkt)
 bool Handle_S_CHAT(PacketSessionRef& session, Protocol::S_CHAT& pkt);
 
 
-class ServerPacketHandler
+class ClientPacketHandler
 {
 public:
 	static void Init()
@@ -43,6 +44,7 @@ public:
 	static SendBufferRef MakeSendBuffer(const Protocol::C_LOGIN&pkt) { return MakeSendBuffer(pkt, PKT_C_LOGIN); }
 	static SendBufferRef MakeSendBuffer(const Protocol::C_ENTER_GAME&pkt) { return MakeSendBuffer(pkt, PKT_C_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(const Protocol::C_CHAT&pkt) { return MakeSendBuffer(pkt, PKT_C_CHAT); }
+	static SendBufferRef MakeSendBuffer(const Protocol::C_HELLOWORLD&pkt) { return MakeSendBuffer(pkt, PKT_C_HELLOWORLD); }
 
 private:
 

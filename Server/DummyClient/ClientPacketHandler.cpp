@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "ServerPacketHandler.h"
+#include "ClientPacketHandler.h"
 #include "Protocol.pb.h"
 
 using namespace std;
@@ -26,7 +26,7 @@ bool Handle_S_LOGIN(PacketSessionRef& session, Protocol::S_LOGIN& pkt)
 	// 입장 UI 버튼 눌러서 게임 입장
 	Protocol::C_ENTER_GAME enterGamePkt;
 	enterGamePkt.set_playerindex(0);
-	auto sendBuffer = ServerPacketHandler::MakeSendBuffer(enterGamePkt);
+	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(enterGamePkt);
 	session->Send(sendBuffer);
 
 	return true;

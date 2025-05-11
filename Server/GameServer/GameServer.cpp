@@ -3,7 +3,7 @@
 #include "ThreadManager.h"
 #include "Service.h"
 #include "GameSession.h"
-#include "ClientPacketHandler.h"
+#include "ServerPacketHandler.h"
 #include "Protocol.pb.h"
 #include "Room.h"
 
@@ -40,7 +40,7 @@ int main()
 	GRoom->DoTimer(1000, [] { cout << "Hello 1000" << endl; });
 	GRoom->DoTimer(2000, [] { cout << "Hello 2000" << endl; });
 	GRoom->DoTimer(3000, [] { cout << "Hello 3000" << endl; });
-	ClientPacketHandler::Init();
+	ServerPacketHandler::Init();
 
 	const ServerServiceRef service = MakeShared<ServerService>(
 		NetAddress(L"127.0.0.1", 7777)
