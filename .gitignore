@@ -31,7 +31,7 @@
 *.app
 *.ipa
 
-# 프로토 버프에 사용되는 파일들은 포함
+# 서버 프로토 버프에 사용되는 파일들은 포함
 !Server/Common/Protobuf/assets/GetPackets.exe
 !Server/Common/Protobuf/assets/protoc.exe
 !Server/Lib/Libs/Protobuf/Debug/libprotobufd.lib
@@ -79,6 +79,9 @@ Plugins/**/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
+# Build log files
+*.tlog
+
 # === Unreal Engine 5 Specific ===
 # UE5 Virtual Assets
 *.ushaderprecache
@@ -90,3 +93,6 @@ Engine/Intermediate/*
 Engine/Saved/*
 Engine/Binaries/*
 Engine/Build/*
+
+# 언리얼 프로토 버프에 사용되는 lib 파일들은 포함
+!UnrealClientSource/ProtobufCore/Lib/Win64/libprotobufd.lib
