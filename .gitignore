@@ -78,3 +78,15 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# === Unreal Engine 5 Specific ===
+# UE5 Virtual Assets
+*.ushaderprecache
+*.uprojectdirs
+
+# Engine local folders (if present)
+Engine/DerivedDataCache/*
+Engine/Intermediate/*
+Engine/Saved/*
+Engine/Binaries/*
+Engine/Build/*
