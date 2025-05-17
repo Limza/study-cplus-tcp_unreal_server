@@ -25,6 +25,14 @@ COPY /Y Protocol.pb.h "..\..\..\DummyClient\Protocol.pb.h"
 COPY /Y Protocol.pb.cc "..\..\..\DummyClient\Protocol.pb.cc"
 COPY /Y ClientPacketHandler.h "..\..\..\DummyClient\ClientPacketHandler.h"
 
+COPY /Y Enum.pb.h "..\..\..\..\UnrealClient\Source\UnrealClient\Network\Enum.pb.h"
+COPY /Y Enum.pb.cc "..\..\..\..\UnrealClient\Source\UnrealClient\Network\Enum.pb.cc"
+COPY /Y Struct.pb.h "..\..\..\..\UnrealClient\Source\UnrealClient\Network\Struct.pb.h"
+COPY /Y Struct.pb.cc "..\..\..\..\UnrealClient\Source\UnrealClient\Network\Struct.pb.cc"
+COPY /Y Protocol.pb.h "..\..\..\..\UnrealClient\Source\UnrealClient\Network\Protocol.pb.h"
+COPY /Y Protocol.pb.cc "..\..\..\..\UnrealClient\Source\UnrealClient\Network\Protocol.pb.cc"
+COPY /Y ClientPacketHandler.h "..\..\..\..\UnrealClient\Source\UnrealClient\ClientPacketHandler.h"
+
 DEL /F /Q *.pb.h
 DEL /F /Q *.pb.cc
 DEL /F /Q *.h

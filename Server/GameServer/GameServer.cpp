@@ -9,6 +9,8 @@
 
 #include <functional>
 
+#include "GameSessionManager.h"
+
 using namespace std;
 
 constexpr uint32 iocpTimeoutMs = 10;
@@ -37,9 +39,9 @@ void DoWorkerJob(const ServerServiceRef& service)
 
 int main()
 {
-	GRoom->DoTimer(1000, [] { cout << "Hello 1000" << endl; });
+	/*GRoom->DoTimer(1000, [] { cout << "Hello 1000" << endl; });
 	GRoom->DoTimer(2000, [] { cout << "Hello 2000" << endl; });
-	GRoom->DoTimer(3000, [] { cout << "Hello 3000" << endl; });
+	GRoom->DoTimer(3000, [] { cout << "Hello 3000" << endl; });*/
 	ServerPacketHandler::Init();
 
 	const ServerServiceRef service = MakeShared<ServerService>(
@@ -59,7 +61,19 @@ int main()
 			});
 	}
 
-	DoWorkerJob(service);
+	// test
+	// DoWorkerJob(service);
+
+	// test
+	while (true)
+	{
+		Protocol::S_CHAT pkt;
+		pkt.set_msg("HelloWorld");
+		auto sendBuffer = ServerPacketHandler::MakeSendBuffer(pkt);
+
+		GSessionManager.Broadcast(sendBuffer);
+		this_thread::sleep_for(1s);
+	}
 
 	GThreadManager->Join();
 }

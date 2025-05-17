@@ -35,8 +35,3 @@ message S_CHAT
 	uint64 playerId = 1;
 	string msg = 2;
 }
-
-message C_HELLOWORLD
-{
-	string msg = 1;
-}

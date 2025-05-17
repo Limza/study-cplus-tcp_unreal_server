@@ -92,8 +92,3 @@ bool Handle_C_CHAT(PacketSessionRef& session, Protocol::C_CHAT& pkt)
 	return true;
 }
 
-bool Handle_C_HELLOWORLD(PacketSessionRef& session, Protocol::C_HELLOWORLD& pkt)
-{
-	return true;
-}
-

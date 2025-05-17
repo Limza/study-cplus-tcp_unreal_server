@@ -3,6 +3,10 @@
 #pragma once
 #include "Protocol.pb.h"
 
+#if UE_BUILD_DEBUG + UE_BUILD_DEVELOPMENT + UE_BUILD_TEST + UE_BUILD_SHIPPING >= 1
+#include "UnrealClient.h"
+#endif
+
 using PacketHandlerFunc = std::function<bool(PacketSessionRef&, BYTE*, const int32)>;
 extern PacketHandlerFunc GPacketHandler[UINT16_MAX];
 
@@ -14,7 +18,6 @@ enum : uint16
 	PKT_S_ENTER_GAME = 1003,
 	PKT_C_CHAT = 1004,
 	PKT_S_CHAT = 1005,
-	PKT_C_HELLOWORLD = 1006,
 };
 
 
@@ -44,7 +47,6 @@ public:
 	static SendBufferRef MakeSendBuffer(const Protocol::C_LOGIN&pkt) { return MakeSendBuffer(pkt, PKT_C_LOGIN); }
 	static SendBufferRef MakeSendBuffer(const Protocol::C_ENTER_GAME&pkt) { return MakeSendBuffer(pkt, PKT_C_ENTER_GAME); }
 	static SendBufferRef MakeSendBuffer(const Protocol::C_CHAT&pkt) { return MakeSendBuffer(pkt, PKT_C_CHAT); }
-	static SendBufferRef MakeSendBuffer(const Protocol::C_HELLOWORLD&pkt) { return MakeSendBuffer(pkt, PKT_C_HELLOWORLD); }
 
 private:
 
@@ -64,12 +66,16 @@ private:
 		const uint16 dataSize = static_cast<uint16>(pkt.ByteSizeLong());
 		const uint16 packetSize = dataSize + sizeof(PacketHeader);
 
+#if UE_BUILD_DEBUG + UE_BUILD_DEVELOPMENT + UE_BUILD_TEST + UE_BUILD_SHIPPING >= 1
+		SendBufferRef sendBuffer = MakeShared<SendBuffer>(packetSize);
+#else
 		SendBufferRef sendBuffer = GSendBufferManager->Open(packetSize);
+#endif
 
 		PacketHeader* header = reinterpret_cast<PacketHeader*>(sendBuffer->Buffer());
 		header->size = packetSize;
 		header->id = pktId;
-		ASSERT_CRASH(pkt.SerializeToArray(&header[1], dataSize));
+		pkt.SerializeToArray(&header[1], dataSize);
 		sendBuffer->Close(packetSize);
 
 		return sendBuffer;
