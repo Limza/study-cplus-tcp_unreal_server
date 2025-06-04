@@ -2,6 +2,7 @@
 #include "ServerPacketHandler.h"
 
 #include "GameSession.h"
+#include "ObjectUtils.h"
 #include "Player.h"
 #include "Room.h"
 
@@ -16,65 +17,65 @@ bool Handle_INVALID(PacketSessionRef& session, BYTE* buffer, const int32 len)
 
 bool Handle_C_LOGIN(PacketSessionRef& session, Protocol::C_LOGIN& pkt)
 {
-	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-
-	// TODO: Validation Check
-
 	Protocol::S_LOGIN loginPkt;
+
+	// TODO : 캐릭터가 3개 있다고 가정
+	for (int32 i = 0; i < 3; ++i)
+	{
+		Protocol::PlayerInfo* player = loginPkt.add_players();
+		player->set_x(Utils::GetRandom(0.f, 100.f));
+		player->set_y(Utils::GetRandom(0.f, 100.f));
+		player->set_z(Utils::GetRandom(0.f, 100.f));
+		player->set_yaw(Utils::GetRandom(0.f, 45.f));
+	}
+
 	loginPkt.set_success(true);
 
-	static Atomic<uint64> idGenerator = 1;
-
-	{
-		const auto player = loginPkt.add_players();
-		player->set_name(reinterpret_cast < const char*>(u8"DB에서 긁어온 이름 1"));
-		player->set_playertype(Protocol::PLAYER_TYPE_KNIGHT);
-
-		const auto playerRef = MakeShared<Player>();
-		playerRef->playerId = idGenerator++;
-		playerRef->name = player->name();
-		playerRef->playerType = player->playertype();
-		playerRef->ownerSession = gameSession;
-
-		gameSession->_players.emplace_back(playerRef);
-	}
-
-	{
-		const auto player = loginPkt.add_players();
-		player->set_name(reinterpret_cast <const char*>(u8"DB에서 긁어온 이름 2"));
-		player->set_playertype(Protocol::PLAYER_TYPE_MAGE);
-
-		const auto playerRef = MakeShared<Player>();
-		playerRef->playerId = idGenerator++;
-		playerRef->name = player->name();
-		playerRef->playerType = player->playertype();
-		playerRef->ownerSession = gameSession;
-
-		gameSession->_players.emplace_back(playerRef);
-	}
-
-	const auto sendBuffer = ServerPacketHandler::MakeSendBuffer(loginPkt);
-	session->Send(sendBuffer);
+	SEND_PACKET(loginPkt, session);
 
 	return true;
 }
 
 bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 {
-	GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+	PlayerRef player = ObjectUtils::CreatePlayer(
+		std::static_pointer_cast<GameSession>(session));
 
-	uint64 index = pkt.playerindex();
-	// TODO: index 유효성 체크
+	GRoom->HandleEnterPlayerLocked(player);
 
-	gameSession->_currentPlayer = gameSession->_players[index];
-	gameSession->_room = GRoom;
+	return true;
+}
 
-	GRoom->DoAsync(&Room::Enter, gameSession->_currentPlayer);
+bool Handle_C_LEAVE_GAME(PacketSessionRef& session, Protocol::C_LEAVE_GAME& pkt)
+{
+	const auto gameSession = std::static_pointer_cast<GameSession>(session);
 
-	Protocol::S_ENTER_GAME enterGamePkt;
-	enterGamePkt.set_success(true);
-	const auto sendBuffer = ServerPacketHandler::MakeSendBuffer(enterGamePkt);
-	gameSession->_currentPlayer->ownerSession->Send(sendBuffer);
+	const PlayerRef player = gameSession->player.load();
+	if (player == nullptr)
+		return false;
+
+	const RoomRef room = player->room.load().lock();
+	if (room == nullptr)
+		return false;
+
+	room->HandleLeavePlayerLocked(player);
+
+	return true;
+}
+
+bool Handle_C_MOVE(PacketSessionRef& session, Protocol::C_MOVE& pkt)
+{
+	const auto gameSession = std::static_pointer_cast<GameSession>(session);
+
+	const PlayerRef player = gameSession->player.load();
+	if (player == nullptr)
+		return false;
+
+	const RoomRef room = player->room.load().lock();
+	if (room == nullptr)
+		return false;
+
+	room->HandleMoveLocked(pkt);
 
 	return true;
 }
@@ -82,12 +83,6 @@ bool Handle_C_ENTER_GAME(PacketSessionRef& session, Protocol::C_ENTER_GAME& pkt)
 bool Handle_C_CHAT(PacketSessionRef& session, Protocol::C_CHAT& pkt)
 {
 	std::cout << pkt.msg() << '\n';
-
-	Protocol::S_CHAT chatPkt;
-	chatPkt.set_msg(pkt.msg());
-	const auto sendBuffer = ServerPacketHandler::MakeSendBuffer(chatPkt);
-
-	GRoom->DoAsync(&Room::Broadcast, sendBuffer);
 
 	return true;
 }

@@ -19,14 +19,6 @@ void GameSession::OnDisconnected()
 		std::static_pointer_cast<GameSession>(shared_from_this())
 	);
 
-	if (_currentPlayer)
-	{
-		if (const auto room = _room.lock())
-			room->DoAsync(&Room::Leave, _currentPlayer);
-	}
-
-	_currentPlayer = nullptr;
-	_players.clear();
 }
 
 void GameSession::OnRecvPacket(BYTE* buffer, const int32 len)

@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Session.h"
 
+class Player;
+
 class GameSession final : public PacketSession
 {
 public:
@@ -18,8 +20,6 @@ protected:
 	void OnSend(const int32 len) override;
 
 public:
-	Vector<PlayerRef> _players;
-	PlayerRef _currentPlayer;
-	std::weak_ptr<class Room> _room;
+	std::atomic<std::shared_ptr<Player>> player;
 };
 

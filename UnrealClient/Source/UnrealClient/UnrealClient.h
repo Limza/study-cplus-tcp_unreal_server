@@ -31,3 +31,12 @@ private:
 #define USING_SHARED_PTR(name) using name##Ref = TSharedPtr<class name>;
 USING_SHARED_PTR(PacketSession);
 USING_SHARED_PTR(SendBuffer);
+
+#include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "UnrealClientGameInstance.h"
+#include "ClientPacketHandler.h"
+
+#define SEND_PACKET(Pkt) \
+	SendBufferRef SendBuffer = ClientPacketHandler::MakeSendBuffer(Pkt); \
+	Cast<UUnrealClientGameInstance>(GWorld->GetGameInstance())->SendPacket(SendBuffer)

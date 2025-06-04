@@ -13,16 +13,13 @@
     <Filter Include="Protocol\proto">
       <UniqueIdentifier>{dd72bbcf-56bd-4ae3-96c5-1882b48c1e44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameContents">
+    <Filter Include="Game">
       <UniqueIdentifier>{3fea80f6-69ec-4b93-9be2-afcfce0749db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameServer.cpp">
       <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="GameSession.cpp">
       <Filter>Main</Filter>
@@ -43,16 +40,22 @@
       <Filter>Protocol</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
-      <Filter>GameContents</Filter>
+      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>GameContents</Filter>
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectUtils.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="GameSession.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -72,10 +75,19 @@
       <Filter>Protocol</Filter>
     </ClInclude>
     <ClInclude Include="Room.h">
-      <Filter>GameContents</Filter>
+      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>GameContents</Filter>
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectUtils.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,14 +15,15 @@ public class UnrealClient : ModuleRules
 			"InputCore", 
 			"EnhancedInput",
 			"Sockets",
-            "Networking",
+            "Networking"
         ]);
 
 		PrivateDependencyModuleNames.AddRange(["ProtobufCore"]);
 
 		PrivateIncludePaths.AddRange([
 			"UnrealClient/",
-			"UnrealClient/Network"
+			"UnrealClient/Network/",
+			"UnrealClient/Game/",
         ]);
 
 		// Uncomment if you are using Slate UI
