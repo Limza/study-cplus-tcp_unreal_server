@@ -19,6 +19,9 @@ public:
 		Push(ObjectPool<Job>::MakeShared(std::move(callback)));
 	}
 
+	// NOTE: args 로 참조값 안넘김, 참조값으로 넘겼다가 나중에 Job에서 args 불러올때 없어서
+	// 문제(혹은 찾기 힘든 에러)가 생길 가능성이 있다
+	// 값으로 넘겨서 명확하게 생명주기를 관리한다
 	template<typename T, typename Ret, typename... Args >
 	void DoAsync(Ret(T::*memFunc)(Args...), Args... args)
 	{

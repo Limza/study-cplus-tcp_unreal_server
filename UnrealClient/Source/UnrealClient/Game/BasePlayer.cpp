@@ -29,8 +29,8 @@ ABasePlayer::ABasePlayer()
 
 	GetCharacterMovement()->bRunPhysicsWithNoController = true;
 
-	PlayerInfo = new Protocol::PlayerInfo();
-	DestInfo = new Protocol::PlayerInfo();
+	PlayerInfo = new Protocol::PosInfo();
+	DestInfo = new Protocol::PosInfo();
 }
 
 ABasePlayer::~ABasePlayer()
@@ -103,7 +103,7 @@ void ABasePlayer::Tick(const float DeltaSeconds)
 	}
 }
 
-void ABasePlayer::SetPlayerInfo(const Protocol::PlayerInfo& Info)
+void ABasePlayer::SetPlayerInfo(const Protocol::PosInfo& Info)
 {
 	if (PlayerInfo->object_id() != 0)
 	{
@@ -116,7 +116,7 @@ void ABasePlayer::SetPlayerInfo(const Protocol::PlayerInfo& Info)
 	SetActorLocation(Location);
 }
 
-void ABasePlayer::SetDestInfo(const Protocol::PlayerInfo& Info) const
+void ABasePlayer::SetDestInfo(const Protocol::PosInfo& Info) const
 {
 	if (PlayerInfo->object_id() != 0)
 	{

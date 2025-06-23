@@ -64,6 +64,8 @@ int main()
 	// test
 	// DoWorkerJob(service);
 
+	GRoom->DoAsync(&Room::UpdateTick);
+
 	// test
 	while (true)
 	{

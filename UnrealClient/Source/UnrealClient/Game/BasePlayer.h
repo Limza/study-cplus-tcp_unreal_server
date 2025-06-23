@@ -22,14 +22,14 @@ protected:
 
 public:
 	[[nodiscard]] bool IsMyPlayer();
-	[[nodiscard]] Protocol::PlayerInfo* GetPlayerInfo() const { return PlayerInfo; }
+	[[nodiscard]] Protocol::PosInfo* GetPlayerInfo() const { return PlayerInfo; }
 	[[nodiscard]] Protocol::MoveState GetMoveState() const { return PlayerInfo->state(); }
 
-	void SetPlayerInfo(const Protocol::PlayerInfo& Info);
-	void SetDestInfo(const Protocol::PlayerInfo& Info) const;
+	void SetPlayerInfo(const Protocol::PosInfo& Info);
+	void SetDestInfo(const Protocol::PosInfo& Info) const;
 	void SetMoveState(const Protocol::MoveState& State) const;
 
 protected:
-	Protocol::PlayerInfo* PlayerInfo; // 현재 위치
-	Protocol::PlayerInfo* DestInfo; // 목적지
+	Protocol::PosInfo* PlayerInfo; // 현재 위치
+	Protocol::PosInfo* DestInfo; // 목적지
 };

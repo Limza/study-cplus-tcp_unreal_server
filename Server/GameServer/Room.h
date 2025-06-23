@@ -1,26 +1,34 @@
 ﻿#pragma once
 #include "Protocol.pb.h"
+#include "JobQueue.h"
 
-class Room : public std::enable_shared_from_this<Room>
+class Room : public JobQueue
 {
 public:
 	Room();
-	virtual ~Room();
+	~Room() override;
 	NON_COPYABLE_CLASS(Room);
 
-	bool HandleEnterPlayerLocked(const PlayerRef& player);
-	bool HandleLeavePlayerLocked(const PlayerRef& player);
-	void HandleMoveLocked(const Protocol::C_MOVE& pkt);
+	bool EnterRoom(ObjectRef object, bool randPos = true);
+	bool LeaveRoom(ObjectRef object);
+
+	bool HandleEnterPlayer(PlayerRef player);
+	bool HandleLeavePlayer(PlayerRef player);
+	void HandleMove(Protocol::C_MOVE pkt);
+
+public:
+	void UpdateTick();
+
+	[[nodiscard]] RoomRef GetRoomRef();
 
 private:
-	bool EnterPlayer(const PlayerRef& player);
-	bool LeavePlayer(uint64 objectId);
+	bool AddObject(const ObjectRef& object);
+	bool RemoveObject(uint64 objectId);
 
 	void Broadcast(const SendBufferRef& sendBuffer, uint64 exceptId = 0);
 
-	USE_LOCK;
 private:
-	std::unordered_map<uint64, PlayerRef>	_players;
+	std::unordered_map<uint64, ObjectRef>	_objects;
 };
 
 extern RoomRef GRoom;

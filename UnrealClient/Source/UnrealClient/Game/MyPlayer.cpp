@@ -90,7 +90,7 @@ void AMyPlayer::Tick(const float DeltaTime)
 
 		Protocol::C_MOVE MovePkt;
 		{
-			Protocol::PlayerInfo* Info = MovePkt.mutable_info();
+			Protocol::PosInfo* Info = MovePkt.mutable_info();
 			Info->CopyFrom(*PlayerInfo);
 			Info->set_yaw(DesiredYaw); // 키보드 입력을 받았을 때, 목적지의 yaw 값
 			Info->set_state(GetMoveState());

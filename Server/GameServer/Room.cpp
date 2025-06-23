@@ -17,24 +17,27 @@ Room::~Room()
 {
 }
 
-bool Room::HandleEnterPlayerLocked(const PlayerRef& player)
+bool Room::EnterRoom(ObjectRef object, bool randPos)
 {
-	WRITE_LOCK;
+	const bool success = AddObject(object);
 
-	const bool success = EnterPlayer(player);
-
-	player->playerInfo->set_x(Utils::GetRandom(0.f, 500.f));
-	player->playerInfo->set_y(Utils::GetRandom(0.f, 500.f));
-	player->playerInfo->set_z(100.f);
-	player->playerInfo->set_yaw(Utils::GetRandom(0.f, 500.f));
+	// 랜덤 위치
+	if (randPos)
+	{
+		object->posInfo->set_x(Utils::GetRandom(0.f, 500.f));
+		object->posInfo->set_y(Utils::GetRandom(0.f, 500.f));
+		object->posInfo->set_z(100.f);
+		object->posInfo->set_yaw(Utils::GetRandom(0.f, 500.f));
+	}
 
 	// 입장 사실을 Enter Player 에게 알린다
+	if (const auto player = std::dynamic_pointer_cast<Player>(object))
 	{
 		Protocol::S_ENTER_GAME enterGamePkt;
 		enterGamePkt.set_success(success);
 
-		const auto playerInfo = new Protocol::PlayerInfo();
-		playerInfo->CopyFrom(*player->playerInfo);
+		const auto playerInfo = new Protocol::ObjectInfo();
+		playerInfo->CopyFrom(*player->objectInfo);
 		enterGamePkt.set_allocated_player(playerInfo);
 
 		const SendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(enterGamePkt);
@@ -46,23 +49,27 @@ bool Room::HandleEnterPlayerLocked(const PlayerRef& player)
 	{
 		Protocol::S_SPAWN spawnPkt;
 
-		Protocol::PlayerInfo* playerInfo = spawnPkt.add_players();
-		playerInfo->CopyFrom(*player->playerInfo);
+		Protocol::ObjectInfo* objectInfo = spawnPkt.add_players();
+		objectInfo->CopyFrom(*object->objectInfo);
 
 		SendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
-		Broadcast(sendBuffer, player->playerInfo->object_id());
+		Broadcast(sendBuffer, object->objectInfo->object_id());
 	}
 
 	// 기존 입장한 플레이어 목록을 신입 플레이어한테 전송한다
+	if (const auto player = std::dynamic_pointer_cast<Player>(object))
 	{
 		Protocol::S_SPAWN spawnPkt;
 
-		for (const auto& enterPlayer : _players | std::views::values)
+		for (const auto& enterPlayer : _objects | std::views::values)
 		{
-			if (enterPlayer->playerInfo->object_id() == player->playerInfo->object_id())
+			if (enterPlayer->IsPlayer() == false)
 				continue;
-			Protocol::PlayerInfo* playerInfo = spawnPkt.add_players();
-			playerInfo->CopyFrom(*enterPlayer->playerInfo);
+
+			if (enterPlayer->objectInfo->object_id() == player->objectInfo->object_id())
+				continue;
+			Protocol::ObjectInfo* playerInfo = spawnPkt.add_players();
+			playerInfo->CopyFrom(*enterPlayer->objectInfo);
 		}
 
 		const SendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(spawnPkt);
@@ -73,24 +80,23 @@ bool Room::HandleEnterPlayerLocked(const PlayerRef& player)
 	return success;
 }
 
-bool Room::HandleLeavePlayerLocked(const PlayerRef& player)
+bool Room::LeaveRoom(ObjectRef object)
 {
-	if (player == nullptr)
+	if (object == nullptr)
 		return false;
 
-	WRITE_LOCK;
+	ObjectRef objectRef = object;
 
-	PlayerRef playerRef = player;
-
-	const uint64 objectId = playerRef->playerInfo->object_id();
-	bool success = LeavePlayer(objectId);
+	const uint64 objectId = objectRef->objectInfo->object_id();
+	bool success = RemoveObject(objectId);
 
 	// 퇴장 사실을 퇴장하는 플레이어에게 알린다
+	if (auto player = std::dynamic_pointer_cast<Player>(objectRef))
 	{
 		const Protocol::S_LEAVE_GAME leaveGamePkt;
 
 		const SendBufferRef sendBuffer = ServerPacketHandler::MakeSendBuffer(leaveGamePkt);
-		if (const auto session = playerRef->session.lock())
+		if (const auto session = player->session.lock())
 			session->Send(sendBuffer);
 	}
 
@@ -103,31 +109,44 @@ bool Room::HandleLeavePlayerLocked(const PlayerRef& player)
 
 		Broadcast(sendBuffer);
 
-		// LeavePlayer() 함수에서 Broadcast 대상에서 빠지기 때문에, 여기서 다시 send
-		if (auto session = playerRef->session.lock())
-			session->Send(sendBuffer);
+		if (auto player = std::dynamic_pointer_cast<Player>(object))
+		{
+			// RemoveObject() 함수에서 Broadcast 대상에서 빠지기 때문에, 여기서 다시 send
+			if (auto session = player->session.lock())
+				session->Send(sendBuffer);
+		}
 	}
 
 	return success;
 }
 
-void Room::HandleMoveLocked(const Protocol::C_MOVE& pkt)
+	
+bool Room::HandleEnterPlayer(PlayerRef player)
 {
-	WRITE_LOCK;
+	return EnterRoom(player, true);
+}
 
+bool Room::HandleLeavePlayer(PlayerRef player)
+{
+	return LeaveRoom(player);
+}
+
+void Room::HandleMove(Protocol::C_MOVE pkt)
+{
 	const uint64 objectId = pkt.info().object_id();
-	if (_players.contains(objectId) == false)
+	if (_objects.contains(objectId) == false)
 		return;
 
-	// TODO : pkt 정보가 유효한지 확인
+	// TODO : pkt 정보가 유효한지 확인, 대략적으로 맞는 위치인지
+	// 서버에서 검증이 있어야 함
 
-	PlayerRef& player = _players[objectId];
-	player->playerInfo->CopyFrom(pkt.info());
+	PlayerRef player = std::dynamic_pointer_cast<Player>(_objects[objectId]);
+	player->posInfo->CopyFrom(pkt.info());
 
 	{
 		Protocol::S_MOVE movePkt;
 		{
-			Protocol::PlayerInfo* info = movePkt.mutable_info();
+			Protocol::PosInfo* info = movePkt.mutable_info();
 			info->CopyFrom(pkt.info());
 		}
 
@@ -136,27 +155,41 @@ void Room::HandleMoveLocked(const Protocol::C_MOVE& pkt)
 	}
 }
 
-bool Room::EnterPlayer(const PlayerRef& player)
+void Room::UpdateTick()
 {
-	if (_players.contains(player->playerInfo->object_id()))
+	//std::cout << "Update Room" << '\n';
+
+	// TODO
+
+	DoTimer(100, &Room::UpdateTick);
+}
+
+RoomRef Room::GetRoomRef()
+{
+	return std::static_pointer_cast<Room>(shared_from_this());
+}
+
+bool Room::AddObject(const ObjectRef& object)
+{
+	if (_objects.contains(object->objectInfo->object_id()))
 		return false;
 
-	PlayerRef playerRef = player; // Add ref
-	_players.insert(std::make_pair(player->playerInfo->object_id(), playerRef));
-	playerRef->room.store(shared_from_this());
+	ObjectRef objectRef = object; // Add ref
+	_objects.insert(std::make_pair(objectRef->objectInfo->object_id(), objectRef));
+	objectRef->room.store(GetRoomRef());
 
 	return true;
 }
 
-bool Room::LeavePlayer(const uint64 objectId)
+bool Room::RemoveObject(const uint64 objectId)
 {
-	if (_players.contains(objectId) == false)
+	if (_objects.contains(objectId) == false)
 		return false;
 
-	const PlayerRef player = _players[objectId];
-	player->room.store(std::weak_ptr<Room>());
+	const ObjectRef object = _objects[objectId];
+	object->room.store(std::weak_ptr<Room>());
 
-	_players.erase(objectId);
+	_objects.erase(objectId);
 
 	return true;
 }
@@ -165,9 +198,13 @@ void Room::Broadcast(const SendBufferRef& sendBuffer, const uint64 exceptId)
 {
 	SendBufferRef sendBufferRef = sendBuffer; // ADD Ref
 
-	for (const auto& player : _players | std::views::values)
+	for (const auto& object : _objects | std::views::values)
 	{
-		if (player->playerInfo->object_id() == exceptId)
+		PlayerRef player = std::dynamic_pointer_cast<Player>(object);
+		if (player == nullptr)
+			continue;
+
+		if (player->objectInfo->object_id() == exceptId)
 			continue;
 
 		if (const GameSessionRef session = player->session.lock())

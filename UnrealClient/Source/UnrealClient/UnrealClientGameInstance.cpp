@@ -85,7 +85,7 @@ void UUnrealClientGameInstance::SendPacket(SendBufferRef SendBuffer)
 }
 
 void UUnrealClientGameInstance::HandleSpawn(
-	const Protocol::PlayerInfo& PlayerInfo, const bool IsMine)
+	const Protocol::ObjectInfo& ObjectInfo, const bool IsMine)
 {
 	if (Socket == nullptr || GameServerSession == nullptr)
 		return;
@@ -95,11 +95,13 @@ void UUnrealClientGameInstance::HandleSpawn(
 		return;
 
 	// 중복 처리 체크
-	const uint64 ObjectId = PlayerInfo.object_id();
+	const uint64 ObjectId = ObjectInfo.object_id();
 	if (Players.Contains(ObjectId))
 		return;
 
-	const FVector SpawnLocation(PlayerInfo.x(), PlayerInfo.y(), PlayerInfo.z());
+	const FVector SpawnLocation(ObjectInfo.pos_info().x(), 
+		ObjectInfo.pos_info().y(),
+		ObjectInfo.pos_info().z());
 
 	if (IsMine)
 	{
@@ -108,7 +110,7 @@ void UUnrealClientGameInstance::HandleSpawn(
 		if (Player == nullptr)
 			return;
 
-		Player->SetPlayerInfo(PlayerInfo);
+		Player->SetPlayerInfo(ObjectInfo.pos_info());
 
 		MyPlayer = Player;
 		Players.Add(ObjectId, Player);
@@ -119,7 +121,7 @@ void UUnrealClientGameInstance::HandleSpawn(
 		if (Player == nullptr)
 			return;
 
-		Player->SetPlayerInfo(PlayerInfo);
+		Player->SetPlayerInfo(ObjectInfo.pos_info());
 		Players.Add(ObjectId, Player);
 	}
 }
@@ -182,7 +184,7 @@ void UUnrealClientGameInstance::HandleMove(const Protocol::S_MOVE& MovePkt)
 	if (Player->IsMyPlayer())
 		return;
 
-	const Protocol::PlayerInfo& Info = MovePkt.info();
+	const Protocol::PosInfo& Info = MovePkt.info();
 	// Player->SetPlayerInfo(Info);
 	Player->SetDestInfo(Info);
 }
